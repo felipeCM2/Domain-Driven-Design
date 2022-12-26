@@ -12,18 +12,18 @@ namespace PaymentContext.Domain.Entities
             DateTime expireDate,
             decimal total,
             decimal totalPaid,
-            string payer,
             Document document,
             Address address,
-            Email email) : base(
+            Email email,
+            string payer) : base(
                 paidDate,
                 expireDate,
                 total,
                 totalPaid,
-                payer,
                 document,
                 address,
-                email)
+                email,
+                payer)
         {
             CardHolderName = cardHolderName;
             CardNumber = cardNumber;

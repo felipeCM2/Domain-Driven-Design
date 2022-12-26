@@ -29,7 +29,7 @@ public class StudentTests
     [TestMethod]
     public void ShouldReturnErrorWhenHadActiveSubscription()
     {
-        var payment = new PaypalPayment("212314", "2245235", DateTime.Now, DateTime.Now.AddDays(5), 10, 10, "Pessoa", _document, _address, _email);
+        var payment = new PaypalPayment("212314", "2245235", DateTime.Now, DateTime.Now.AddDays(5), 10, 10, _document, _address, _email, "Pessoa");
 
         _subscription.AddPayment(payment);
         _student.AddSubscription(_subscription);
@@ -49,7 +49,7 @@ public class StudentTests
     [TestMethod]
     public void ShouldReturnSuccessWhenSubscriptionHasPayment()
     {
-        var payment = new PaypalPayment("212314", "2245235", DateTime.Now, DateTime.Now.AddDays(5), 10, 10, "Pessoa", _document, _address, _email);
+        var payment = new PaypalPayment("212314", "2245235", DateTime.Now, DateTime.Now.AddDays(5), 10, 10, _document, _address, _email, "Pessoa");
 
         _subscription.AddPayment(payment);
         _student.AddSubscription(_subscription);
