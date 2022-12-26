@@ -1,3 +1,5 @@
+using Flunt.Notifications;
+using Flunt.Validations;
 using PaymentContext.Domain.ValueObjects;
 using PaymentContext.Shared.Entities;
 
@@ -7,15 +9,16 @@ namespace PaymentContext.Domain.Entities
     {
         private IList<Subscription> _subscriptions;
 
-        public Student(Name name, Document document, Email email, Address address)
+        public Student(Name name, Document document, Email email)
         {
             Name = name;
             Document = document;
             Email = email;
-            Address = address;
             _subscriptions = new List<Subscription>();
 
-            AddNotifications(name, document, email, address);
+            AddNotifications(name, document, email);
+
+            var x = _subscriptions.Select(s => s.Active).ToList();
         }
 
         public Name Name { get; set; }
@@ -26,13 +29,28 @@ namespace PaymentContext.Domain.Entities
 
         public void AddSubscription(Subscription subscription)
         {
-            // Desativar assinaturas ativas
-            foreach (var subs in _subscriptions)
+            var hasSubscriptionActive = false;
+            foreach (var sub in _subscriptions)
             {
-                subs.Inactivate();
+                if (sub.Active)
+                    hasSubscriptionActive = true;
             }
 
-            _subscriptions.Add(subscription);
+            // AddNotifications(new Contract<Notification>()
+            // .Requires()
+            // .IsTrue(hasSubscriptionActive, "Student.Subscriptions", "Você já tem uma assinatura ativa")
+            // .AreEquals(0, subscription.Payments.Count, "Student.Subscriptions", "Está assinatura não possui pagamento")
+            // );
+
+            if (hasSubscriptionActive)
+                AddNotification("Student.Subscriptions", "Você já tem uma assinatura ativa");
+
+            if (subscription.Payments.Count == 0)
+                AddNotification("Student.Subscriptions", "Está assinatura não possui pagamento");
+
+
+            if (IsValid)
+                _subscriptions.Add(subscription);
         }
     }
 }
